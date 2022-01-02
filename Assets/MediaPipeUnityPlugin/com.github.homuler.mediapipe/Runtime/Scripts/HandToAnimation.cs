@@ -80,10 +80,11 @@ public class HandToAnimation : MonoBehaviour
                 var yPlane = Vector3.ProjectOnPlane(fingerDirection, yaxis);
                 var zPlane = Vector3.ProjectOnPlane(fingerDirection, zaxis);
 
-                var yAngle = Vector3.Angle(xaxis, yPlane);
-                var zAngle = Vector3.Angle(xaxis, zPlane);
+                var yAngle = Vector3.Angle(-xaxis, yPlane);
+                var zAngle = Vector3.Angle(-xaxis, zPlane);
 
                 leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, yAngle, zAngle);
+                Debug.LogError(leftHandParts[i * 3 + j].localEulerAngles);
             }
             fingerRoot += 4;
         }
