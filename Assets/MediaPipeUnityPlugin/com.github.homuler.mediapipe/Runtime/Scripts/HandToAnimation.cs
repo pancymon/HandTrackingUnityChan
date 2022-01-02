@@ -66,30 +66,24 @@ public class HandToAnimation : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(zaxis,yaxis);
 
         int fingerRoot = 1;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 5; i++)
         {
             var rootDirection = points[fingerRoot] - points[0];
-            for (int j = 0; j < 1; j++)
+            for (int j = 0; j < 3; j++)
             {
                 var fingerDirection = points[fingerRoot + j + 1] - points[fingerRoot+j];
 
                 var rotation = Quaternion.FromToRotation(rootDirection, fingerDirection);
                 var localRotation = Quaternion.Inverse(transform.rotation) * rotation;
+
+                var originalRotation = transform.rotation;
+                transform.rotation = rotation;
+                localRotation = transform.localRotation;
+                transform.rotation = originalRotation;
+
                 //var localRotation = rotation* transform.rotation ;
                 leftHandParts[i * 3 + j].localRotation = localRotation;
                 Debug.LogError(localRotation.eulerAngles);
-                // leftHandParts[i * 3 + j].rotation = localRotation;
-
-                //var angle = Vector3.Angle(rootDirection,fingerDirection);
-                //if (i == 0)
-                //{
-                //    leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, 0,angle);
-                //}
-                //else
-                //{
-                //    leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, angle, 0);
-                //}
-
             }
             fingerRoot += 4;
         }
