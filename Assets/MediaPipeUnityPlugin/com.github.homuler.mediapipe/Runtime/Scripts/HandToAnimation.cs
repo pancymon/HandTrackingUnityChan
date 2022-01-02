@@ -28,7 +28,7 @@ public class HandToAnimation : MonoBehaviour
           TriggerAnimation(d.Landmark);      
           Debug.LogWarning("count of marks: "+d.Landmark.Count);
           Debug.Log("x: "+dd.X+" y: "+dd.Y+" z: "+dd.Z);
-          spheres[count].transform.localPosition = new Vector3(dd.X,dd.Y,dd.Z);
+          spheres[count].transform.position = new Vector3(dd.X,dd.Y,dd.Z);
           count++;
         }
       }
@@ -57,26 +57,38 @@ public class HandToAnimation : MonoBehaviour
         //    fingerRoot += 4;
         //}
 
+        var xaxis = (points[0] - points[9]).normalized;
+        var yaxis = (points[5] - points[9]).normalized;
+        var zaxis = Vector3.Cross(xaxis, yaxis).normalized;
+
+        //transform.LookAt(zaxis,yaxis);
+
+        transform.rotation = Quaternion.LookRotation(zaxis,yaxis);
+
         int fingerRoot = 1;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 2; i++)
         {
             var rootDirection = points[fingerRoot] - points[0];
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 1; j++)
             {
-                var fingerDirection = points[fingerRoot + j + 1] - points[fingerRoot];
+                var fingerDirection = points[fingerRoot + j + 1] - points[fingerRoot+j];
 
-                //var rotation = Quaternion.FromToRotation(rootDirection, fingerDirection);
-                //leftHandParts[i * 3 + j].rotation = rotation;
+                var rotation = Quaternion.FromToRotation(rootDirection, fingerDirection);
+                var localRotation = Quaternion.Inverse(transform.rotation) * rotation;
+                //var localRotation = rotation* transform.rotation ;
+                leftHandParts[i * 3 + j].localRotation = localRotation;
+                Debug.LogError(localRotation.eulerAngles);
+                // leftHandParts[i * 3 + j].rotation = localRotation;
 
-                var angle = Vector3.Angle(rootDirection,fingerDirection);
-                if (i == 0)
-                {
-                    leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, 0,angle);
-                }
-                else
-                {
-                    leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, angle, 0);
-                }
+                //var angle = Vector3.Angle(rootDirection,fingerDirection);
+                //if (i == 0)
+                //{
+                //    leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, 0,angle);
+                //}
+                //else
+                //{
+                //    leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, angle, 0);
+                //}
 
             }
             fingerRoot += 4;
