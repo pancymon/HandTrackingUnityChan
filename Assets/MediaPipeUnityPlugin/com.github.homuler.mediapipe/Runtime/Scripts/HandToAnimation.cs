@@ -63,7 +63,7 @@ public class HandToAnimation : MonoBehaviour
             var rootDirection = points[fingerRoot] - points[0];
             for (int j = 0; j < 3; j++)
             {
-                var fingerDirection = points[fingerRoot + j + 1] - points[fingerRoot];
+                var fingerDirection = points[fingerRoot + j + 1] - points[fingerRoot+j];
 
                 //var rotation = Quaternion.FromToRotation(rootDirection, fingerDirection);
                 //leftHandParts[i * 3 + j].rotation = rotation;
@@ -77,6 +77,8 @@ public class HandToAnimation : MonoBehaviour
                 {
                     leftHandParts[i * 3 + j].localEulerAngles = new Vector3(0, angle, 0);
                 }
+
+                rootDirection = fingerDirection;
 
             }
             fingerRoot += 4;
